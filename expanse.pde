@@ -20,19 +20,19 @@ void setup() {
   int depth = 20;
   for (int i = 0; i < 10; i++) {
     //RingElement ring = new RingElement(
-    //  origin, 
+    //  origin,
     //  i * depth, // inner rad
     //  i == 0 ? depth : depth + i * depth, // outer rad
     //  seg, // segemtns
-    //  random(PI*2), 
+    //  random(PI*2),
     //  color(random(100, 200), random(20, 40), random(80, 100))
     //  );
        RingElement ring = new RingElement(
-      origin, 
+      origin,
       i * depth, // inner rad
       i == 0 ? depth : depth + i * depth, // outer rad
       seg, // segemtns
-      random(PI*2), // rotation in radians
+      (PI + 0.2), // rotation in radians
       110,220, // hue range
       50,80, // sat range
       90,100 // lightness range

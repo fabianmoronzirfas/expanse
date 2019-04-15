@@ -15,11 +15,11 @@ class RingElement {
 
 
   RingElement(
-    PVector _origin, 
-    float _innerRadius, 
-    float _outerRadius, 
-    int _segments, 
-    float _rotation, 
+    PVector _origin,
+    float _innerRadius,
+    float _outerRadius,
+    int _segments,
+    float _rotation,
     color _c) {
 
     this.c = _c;
@@ -33,16 +33,16 @@ class RingElement {
   }
 
   RingElement(
-    PVector _origin, 
-    float _innerRadius, 
-    float _outerRadius, 
-    int _segments, 
-    float _rotation, 
-    float hueMin, 
-    float hueMax, 
-    float satMin, 
-    float satMax, 
-    float lightnMin, 
+    PVector _origin,
+    float _innerRadius,
+    float _outerRadius,
+    int _segments,
+    float _rotation,
+    float hueMin,
+    float hueMax,
+    float satMin,
+    float satMax,
+    float lightnMin,
     float ligthnMax
     ) {
     hueRange = new float[2];
@@ -67,14 +67,14 @@ class RingElement {
   private void setup() {
     this.depth = this.outerRadius - this.innerRadius;
     innerRing = new Ring(
-      this.origin, 
-      this.innerRadius, 
+      this.origin,
+      this.innerRadius,
       this.segments
       );
 
     outerRing = new Ring(
-      this.origin, 
-      this.outerRadius, 
+      this.origin,
+      this.outerRadius,
       this.segments
       );
   }
@@ -88,19 +88,43 @@ class RingElement {
       fill(this.c);
     }
 
-    float hs = (this.hueRange[1] - this.hueRange[0]) / this.segments; 
-    float ss = (this.satRange[1] - this.satRange[0]) / this.segments;
-    float bs = (this.lightnRange[1] - this.lightnRange[0]) / this.segments;
+    float hs = ((this.hueRange[1] - this.hueRange[0]) / this.segments)  * 2;
+    float ss = ((this.satRange[1] - this.satRange[0]) / this.segments)  * 2;
+    float bs = ((this.lightnRange[1] - this.lightnRange[0]) / this.segments) * 2;
     println("hue max: " + this.hueRange[1] + "\t\thue min: " + this.hueRange[0] + "\t\thue step: " + hs);
+
+    // loop the segments
+    int ci = 0; // color index
+    boolean  up = true;
+    boolean once = false;
+        float h = this.hueRange[0];
+        float s  = this.satRange[0];
+        float b = this.lightnRange[0];
     for (int i = 0; i < this.segments; i++) {
       if (this.hueRange.length > 0) {
-        float h = this.hueRange[0] +hs * i;
-        float s = this.satRange[0]+  ss * i;
-        float b = this.lightnRange[0]+ bs * i;
+
+        fill(h, s, b);
+        if(i > this.segments / 2){
+          up = false;
+          if(once == false ){
+            ci = 0;
+            once = true;
+          }
+        }
+        if(up == true){
+         h += hs;
+         s += ss;
+         b += bs;
+        }else{
+          h -= hs;
+          s -= ss;
+          b -= bs;
+        }
         println("h: " + h + "\t\ts: " + s +"\t\tb: " + b);
-        fill( h, s, b);
+
+         ci++;
       }
-      int ni = i+1 == this.segments ? 0 : i + 1;
+      int ni = i + 1 == this.segments ? 0 : i + 1;
       beginShape();
       vertex(innerRing.points.get(i).x, innerRing.points.get(i).y);
       vertex(innerRing.points.get(ni).x, innerRing.points.get(ni).y);
@@ -114,9 +138,9 @@ class RingElement {
 
 void keyPressed(){
   if(key == 's' || key == 'S'){
-      String fn ="expanse-" + timestamp() + ".png"; 
+      String fn ="expanse-" + timestamp() + ".png";
       saveFrame(fn);
       println("Saved " + fn);
-      
+
   }
 }
